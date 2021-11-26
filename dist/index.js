@@ -77,13 +77,6 @@ function register(state, name, method, options) {
 
 /***/ }),
 
-/***/ 4:
-/***/ (function(module) {
-
-module.exports = require("child_process");
-
-/***/ }),
-
 /***/ 16:
 /***/ (function(module) {
 
@@ -958,21 +951,9 @@ module.exports = __webpack_require__(674);
 /***/ }),
 
 /***/ 129:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
+/***/ (function(module) {
 
-"use strict";
-
-
-exports.URL = __webpack_require__(819).interface;
-exports.serializeURL = __webpack_require__(151).serializeURL;
-exports.serializeURLOrigin = __webpack_require__(151).serializeURLOrigin;
-exports.basicURLParse = __webpack_require__(151).basicURLParse;
-exports.setTheUsername = __webpack_require__(151).setTheUsername;
-exports.setThePassword = __webpack_require__(151).setThePassword;
-exports.serializeHost = __webpack_require__(151).serializeHost;
-exports.serializeInteger = __webpack_require__(151).serializeInteger;
-exports.parseURL = __webpack_require__(151).parseURL;
-
+module.exports = require("child_process");
 
 /***/ }),
 
@@ -2057,7 +2038,7 @@ exports.getOctokit = getOctokit;
 
 "use strict";
 
-const punycode = __webpack_require__(213);
+const punycode = __webpack_require__(815);
 const tr46 = __webpack_require__(753);
 
 const specialSchemes = {
@@ -3393,7 +3374,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findInPath = exports.which = exports.mkdirP = exports.rmRF = exports.mv = exports.cp = void 0;
 const assert_1 = __webpack_require__(357);
-const childProcess = __importStar(__webpack_require__(4));
+const childProcess = __importStar(__webpack_require__(129));
 const path = __importStar(__webpack_require__(622));
 const util_1 = __webpack_require__(669);
 const ioUtil = __importStar(__webpack_require__(969));
@@ -4026,11 +4007,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.argStringToArray = exports.ToolRunner = void 0;
 const os = __importStar(__webpack_require__(87));
 const events = __importStar(__webpack_require__(614));
-const child = __importStar(__webpack_require__(4));
+const child = __importStar(__webpack_require__(129));
 const path = __importStar(__webpack_require__(622));
 const io = __importStar(__webpack_require__(163));
 const ioUtil = __importStar(__webpack_require__(969));
-const timers_1 = __webpack_require__(343);
+const timers_1 = __webpack_require__(213);
 /* eslint-disable @typescript-eslint/unbound-method */
 const IS_WINDOWS = process.platform === 'win32';
 /*
@@ -4624,7 +4605,7 @@ module.exports = require("https");
 /***/ 213:
 /***/ (function(module) {
 
-module.exports = require("punycode");
+module.exports = require("timers");
 
 /***/ }),
 
@@ -5049,13 +5030,6 @@ module.exports = require("string_decoder");
 
 /***/ }),
 
-/***/ 343:
-/***/ (function(module) {
-
-module.exports = require("timers");
-
-/***/ }),
-
 /***/ 348:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -5467,50 +5441,20 @@ exports.paginatingEndpoints = paginatingEndpoints;
 /***/ }),
 
 /***/ 474:
-/***/ (function(module, __unusedexports, __webpack_require__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
-var wrappy = __webpack_require__(527)
-module.exports = wrappy(once)
-module.exports.strict = wrappy(onceStrict)
+"use strict";
 
-once.proto = once(function () {
-  Object.defineProperty(Function.prototype, 'once', {
-    value: function () {
-      return once(this)
-    },
-    configurable: true
-  })
 
-  Object.defineProperty(Function.prototype, 'onceStrict', {
-    value: function () {
-      return onceStrict(this)
-    },
-    configurable: true
-  })
-})
-
-function once (fn) {
-  var f = function () {
-    if (f.called) return f.value
-    f.called = true
-    return f.value = fn.apply(this, arguments)
-  }
-  f.called = false
-  return f
-}
-
-function onceStrict (fn) {
-  var f = function () {
-    if (f.called)
-      throw new Error(f.onceError)
-    f.called = true
-    return f.value = fn.apply(this, arguments)
-  }
-  var name = fn.name || 'Function wrapped with `once`'
-  f.onceError = name + " shouldn't be called more than once"
-  f.called = false
-  return f
-}
+exports.URL = __webpack_require__(819).interface;
+exports.serializeURL = __webpack_require__(151).serializeURL;
+exports.serializeURLOrigin = __webpack_require__(151).serializeURLOrigin;
+exports.basicURLParse = __webpack_require__(151).basicURLParse;
+exports.setTheUsername = __webpack_require__(151).setTheUsername;
+exports.setThePassword = __webpack_require__(151).setThePassword;
+exports.serializeHost = __webpack_require__(151).serializeHost;
+exports.serializeInteger = __webpack_require__(151).serializeInteger;
+exports.parseURL = __webpack_require__(151).parseURL;
 
 
 /***/ }),
@@ -5630,31 +5574,31 @@ function wrappy (fn, cb) {
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 const core = __webpack_require__(927);
-const github = __webpack_require__(131);
+// const github = require('@actions/github');
 const git = __webpack_require__(348)
 
 async function authorized() {
   core.setOutput('authorized', true);
 }
 
-async function getCollaborators(githubToken, teams) {
-  core.info(`Getting collaborators...`);
-  const octokit = github.getOctokit(githubToken);
+// async function getCollaborators(githubToken, teams) {
+//   core.info(`Getting collaborators...`);
+//   const octokit = github.getOctokit(githubToken);
 
-  const team_slugs = teams.split(',');
-  let users = [];
+//   const team_slugs = teams.split(',');
+//   let users = [];
 
-  for (let i in team_slugs) {
-    const { data } = await octokit.request('GET /orgs/{org}/teams/{team_slug}/members', {
-      org: github.context.repo.owner,
-      team_slug: team_slugs[i].trim()
-    });
+//   for (let i in team_slugs) {
+//     const { data } = await octokit.request('GET /orgs/{org}/teams/{team_slug}/members', {
+//       org: github.context.repo.owner,
+//       team_slug: team_slugs[i].trim()
+//     });
 
-    users = users.concat(data.map(user => user.login));    
-  }
+//     users = users.concat(data.map(user => user.login));    
+//   }
 
-  return users;
-}
+//   return users;
+// }
 
 async function run() {
   core.info('Running...');
@@ -5670,36 +5614,35 @@ async function run() {
     const defaultBranch = core.getInput('default-branch', { required : true });
     core.info(`Default branch: ${defaultBranch}`);
 
-    const githubToken = core.getInput('github-token', { required : true });
-    core.info(`Github token: ${githubToken}`);
+    // const githubToken = core.getInput('github-token', { required : true });
+    // core.info(`Github token: ${githubToken}`);
 
-    const teams = core.getInput('teams', { required : true });
+    // const teams = core.getInput('teams', { required : true });
 
-    const users = await getCollaborators(githubToken, teams);
-    core.info(`users: ${users}`);
+    // const users = await getCollaborators(githubToken, teams);
+    // core.info(`users: ${users}`);
 
     await authorized();
 
-    const actor = github.context.actor;
+    // const actor = github.context.actor;
 
-    // // if github.actor
     if (environment === 'production') {
       if (defaultBranch !== currentBranch) {
         core.debug(`${currentBranch} cannot be deployed to production.`);
         throw new Error(`Only ${defaultBranch} branch can be deployed to production.`);
       }
 
-      if (!users.includes(actor)) {
-        core.debug(`${actor} is not given team.`);
-        throw new Error(`${actor} is not given team. Only users in ${teams} can deploy to production.`);
-      }
+      // if (!users.includes(actor)) {
+      //   core.debug(`${actor} is not given team.`);
+      //   throw new Error(`${actor} is not given team. Only users in ${teams} can deploy to production.`);
+      // }
 
       await authorized();
     } else {
-      if (!users.includes(actor)) {
-        core.debug(`${actor} is not given team.`);
-        throw new Error(`${actor} is not given team. Only users in ${teams} can deploy to production.`);
-      }
+      // if (!users.includes(actor)) {
+      //   core.debug(`${actor} is not given team.`);
+      //   throw new Error(`${actor} is not given team. Only users in ${teams} can deploy to production.`);
+      // }
 
       await authorized();
     }
@@ -5768,6 +5711,55 @@ function getApiBaseUrl() {
 }
 exports.getApiBaseUrl = getApiBaseUrl;
 //# sourceMappingURL=utils.js.map
+
+/***/ }),
+
+/***/ 603:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+var wrappy = __webpack_require__(527)
+module.exports = wrappy(once)
+module.exports.strict = wrappy(onceStrict)
+
+once.proto = once(function () {
+  Object.defineProperty(Function.prototype, 'once', {
+    value: function () {
+      return once(this)
+    },
+    configurable: true
+  })
+
+  Object.defineProperty(Function.prototype, 'onceStrict', {
+    value: function () {
+      return onceStrict(this)
+    },
+    configurable: true
+  })
+})
+
+function once (fn) {
+  var f = function () {
+    if (f.called) return f.value
+    f.called = true
+    return f.value = fn.apply(this, arguments)
+  }
+  f.called = false
+  return f
+}
+
+function onceStrict (fn) {
+  var f = function () {
+    if (f.called)
+      throw new Error(f.onceError)
+    f.called = true
+    return f.value = fn.apply(this, arguments)
+  }
+  var name = fn.name || 'Function wrapped with `once`'
+  f.onceError = name + " shouldn't be called more than once"
+  f.called = false
+  return f
+}
+
 
 /***/ }),
 
@@ -5908,7 +5900,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var Stream = _interopDefault(__webpack_require__(413));
 var http = _interopDefault(__webpack_require__(605));
 var Url = _interopDefault(__webpack_require__(835));
-var whatwgUrl = _interopDefault(__webpack_require__(129));
+var whatwgUrl = _interopDefault(__webpack_require__(474));
 var https = _interopDefault(__webpack_require__(211));
 var zlib = _interopDefault(__webpack_require__(761));
 
@@ -8048,7 +8040,7 @@ exports.OidcClient = OidcClient;
 "use strict";
 
 
-var punycode = __webpack_require__(213);
+var punycode = __webpack_require__(815);
 var mappingTable = __webpack_require__(526);
 
 var PROCESSING_OPTIONS = {
@@ -8289,7 +8281,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var deprecation = __webpack_require__(227);
-var once = _interopDefault(__webpack_require__(474));
+var once = _interopDefault(__webpack_require__(603));
 
 const logOnceCode = once(deprecation => console.warn(deprecation));
 const logOnceHeaders = once(deprecation => console.warn(deprecation));
@@ -8357,6 +8349,13 @@ class RequestError extends Error {
 exports.RequestError = RequestError;
 //# sourceMappingURL=index.js.map
 
+
+/***/ }),
+
+/***/ 815:
+/***/ (function(module) {
+
+module.exports = require("punycode");
 
 /***/ }),
 

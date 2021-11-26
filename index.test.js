@@ -30,9 +30,9 @@ describe('Authorize deploy', () => {
       .fn()
       .mockReturnValueOnce('staging')             // environment
       .mockReturnValueOnce('a-commit-id')         // commit-id
-      .mockReturnValueOnce('main')                // main
-      .mockReturnValueOnce('secret-token')        // github-token
-      .mockReturnValueOnce('backend,devops');             // teams
+      .mockReturnValueOnce('main');               // main
+      // .mockReturnValueOnce('secret-token')        // github-token
+      // .mockReturnValueOnce('backend,devops');     // teams
 
     git.findBranch = jest
       .fn()
