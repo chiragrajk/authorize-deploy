@@ -1,0 +1,26 @@
+name: 'Authorize Deploy Action for GitHub Actions'
+description: 'Checks if actor, branch and commit can be deployed to environment'
+branding:
+  icon: 'tablet'
+  color: 'purple'
+inputs:
+  environment:
+    description: 'Deployment stack environment'
+    required: true
+  default-branch:
+    description: 'Default branch of the repo'
+    required: true
+  github-token:
+    description: 'Github token to fetch repo collaborators'
+    required: true
+  commit-id:
+    description: 'Commit id to be authorized.'
+    required: true
+
+outputs:
+  authorized:
+    description: 'true if authorized to be deployed.'
+  
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
