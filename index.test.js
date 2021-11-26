@@ -1,9 +1,25 @@
 const run = require('.');
-const git = require('./git');
 const core = require('@actions/core');
+const git = require('./git');
 
 jest.mock('./git');
 jest.mock('@actions/core');
+
+const mockOctokitRequest = jest.fn();
+jest.mock('@actions/github', () => ({
+  getOctokit: jest.fn(() => ({
+    request: mockOctokitRequest
+  })),
+  context: {
+    actor: 'actor-jest',
+    ref: 'refs/heads/main',
+    repo: {
+      owner: 'suitepad',
+      repo: 'test-repo'
+    }
+  }
+})
+);
 
 describe('Authorize deploy', () => {
 
@@ -19,7 +35,16 @@ describe('Authorize deploy', () => {
 
     git.findBranch = jest
       .fn()
-      .mockResolvedValueOnce('mock/main')              // main
+      .mockResolvedValueOnce('mock/main')         // main
+
+    mockOctokitRequest.mockImplementation(() => {
+      return Promise.resolve([
+        {
+          role_name: 'admin',
+          login: 'actor-jest'
+        }
+      ]);
+    });
 
   });
 
