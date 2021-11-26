@@ -22,5 +22,5 @@ outputs:
     description: 'true if authorized to be deployed.'
   
 runs:
-  using: 'node16'
+  using: 'node12'
   main: 'dist/index.js'

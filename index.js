@@ -10,7 +10,7 @@ async function getCollaborators(githubToken) {
   core.info(`Getting collaborators...`);
   const octokit = github.getOctokit(githubToken);
 
-  const data = await octokit.request('GET /repos/{owner}/{repo}/collaborators', {
+  const { data } = await octokit.request('GET /repos/{owner}/{repo}/collaborators', {
     owner: github.context.repo.owner,
     repo: github.context.repo.repo
   })

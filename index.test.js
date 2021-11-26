@@ -38,12 +38,13 @@ describe('Authorize deploy', () => {
       .mockResolvedValueOnce('mock/main')         // main
 
     mockOctokitRequest.mockImplementation(() => {
-      return Promise.resolve([
+      return Promise.resolve({
+      data: [
         {
           role_name: 'admin',
           login: 'actor-jest'
         }
-      ]);
+      ]});
     });
 
   });
@@ -51,5 +52,6 @@ describe('Authorize deploy', () => {
   test('should run', async () => {
     await run();
     expect(core.setFailed).toHaveBeenCalledTimes(0);
+    expect(core.setOutput).toBeCalledWith('authorized', true);
   });
 });
