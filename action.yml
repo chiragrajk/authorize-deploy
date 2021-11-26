@@ -16,6 +16,9 @@ inputs:
   commit-id:
     description: 'Commit id to be authorized.'
     required: true
+  teams:
+    description: 'Team ids allowed to make deploys.'
+    required: true
 
 outputs:
   authorized:

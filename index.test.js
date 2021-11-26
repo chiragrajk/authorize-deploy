@@ -31,7 +31,8 @@ describe('Authorize deploy', () => {
       .mockReturnValueOnce('staging')             // environment
       .mockReturnValueOnce('a-commit-id')         // commit-id
       .mockReturnValueOnce('main')                // main
-      .mockReturnValueOnce('secret-token');       // github-token
+      .mockReturnValueOnce('secret-token')        // github-token
+      .mockReturnValueOnce('backend,devops');             // teams
 
     git.findBranch = jest
       .fn()
@@ -41,7 +42,7 @@ describe('Authorize deploy', () => {
       return Promise.resolve({
       data: [
         {
-          role_name: 'admin',
+          // role_name: 'admin',
           login: 'actor-jest'
         }
       ]});

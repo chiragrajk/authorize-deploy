@@ -5637,33 +5637,23 @@ async function authorized() {
   core.setOutput('authorized', true);
 }
 
-async function getCollaborators(githubToken) {
+async function getCollaborators(githubToken, teams) {
   core.info(`Getting collaborators...`);
   const octokit = github.getOctokit(githubToken);
 
-  const { data } = await octokit.request('GET /repos/{owner}/{repo}/collaborators', {
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo
-  })
+  const team_slugs = teams.split(',');
+  let users = [];
 
-  console.log(`data: ${JSON.stringify(data)}`)
-  console.log(data)
+  for (let i in team_slugs) {
+    const { data } = await octokit.request('GET /orgs/{org}/teams/{team_slug}/members', {
+      org: github.context.repo.owner,
+      team_slug: team_slugs[i].trim()
+    });
 
-  const adminUsers = data.reduce((acc, user) => {
-    if (user.role_name === 'admin') {
-      acc.push(user.login);
-    }
-    return acc;
-  }, []);
+    users = users.concat(data.map(user => user.login));    
+  }
 
-  const writeUsers = data.reduce((acc, user) => {
-    if (user.role_name === 'write') {
-      acc.push(user.login);
-    }
-    return acc;
-  }, []);
-
-  return [adminUsers, writeUsers];
+  return users;
 }
 
 async function run() {
@@ -5682,9 +5672,11 @@ async function run() {
 
     const githubToken = core.getInput('github-token', { required : true });
     core.info(`Github token: ${githubToken}`);
-    const [admins, writers] = await getCollaborators(githubToken);
-    core.info(`Admins: ${admins}`);
-    core.info(`Writers: ${writers}`);
+
+    const teams = core.getInput('teams', { required : true });
+
+    const users = await getCollaborators(githubToken, teams);
+    core.info(`users: ${users}`);
 
     await authorized();
 
@@ -5697,16 +5689,16 @@ async function run() {
         throw new Error(`Only ${defaultBranch} branch can be deployed to production.`);
       }
 
-      if (!admins.includes(actor)) {
-        core.debug(`${actor} is not an admin user.`);
-        throw new Error(`${actor} is not an admin user. Only admin user can deploy to production.`);
+      if (!users.includes(actor)) {
+        core.debug(`${actor} is not given team.`);
+        throw new Error(`${actor} is not given team. Only users in ${teams} can deploy to production.`);
       }
 
       await authorized();
     } else {
-      if (!admins.includes(actor) && !writers.includes(actor)) {
-        core.debug(`${actor} is not an admin or write user.`);
-        throw new Error(`${actor} is not an admin or write user. Only admin or write user can deploy to production.`);
+      if (!users.includes(actor)) {
+        core.debug(`${actor} is not given team.`);
+        throw new Error(`${actor} is not given team. Only users in ${teams} can deploy to production.`);
       }
 
       await authorized();
